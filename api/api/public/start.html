@@ -1,0 +1,31 @@
+<!-- public/start.html -->
+<script>
+  async function init() {
+    try {
+      const res = await fetch('/api/get-code');
+      const data = await res.json();
+
+      if (data.error === 'outside_window') {
+        document.getElementById('msg').textContent =
+          'The quiz is available between 8:00am and 1:30pm. Come back then!';
+        return;
+      }
+      if (data.error === 'no_codes_available') {
+        document.getElementById('msg').textContent =
+          'All vault codes have been claimed. Stay tuned for the next release.';
+        return;
+      }
+
+      // Redirect into Typeform with code pre-filled
+      const FORM_ID = 'YOUR_TYPEFORM_FORM_ID';
+      window.location.href =
+        `https://form.typeform.com/to/${FORM_ID}?vault_code=${data.code}`;
+
+    } catch (e) {
+      document.getElementById('msg').textContent =
+        'Something went wrong. Please try again shortly.';
+    }
+  }
+  init();
+</script>
+<p id="msg">Loading your vault access...</p>
