@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'method not allowed' })
   }
 
-  const used = new Set()
+  const used = new Set(['754', '839'])
   const pool = []
 
   function unique3() {
@@ -21,13 +21,16 @@ export default async function handler(req, res) {
     return c
   }
 
-  pool.push({ code: unique3(), limit: 1,  used: 0, tier: 'ultra'   })
-  pool.push({ code: unique3(), limit: 15, used: 0, tier: 'limited' })
+  // Your specific special codes
+  pool.push({ code: '754', limit: 1,  used: 0, tier: 'ultra'   })
+  pool.push({ code: '839', limit: 15, used: 0, tier: 'limited' })
 
-  for (let i = 0; i < 18; i++) {
-    pool.push({ code: unique3(), limit: randInt(100, 500), used: 0, tier: 'standard' })
+  // 198 random codes excluding 754 and 839
+  for (let i = 0; i < 198; i++) {
+    pool.push({ code: unique3(), limit: 1, used: 0, tier: 'standard' })
   }
 
+  // Shuffle so order is random
   pool.sort(() => Math.random() - 0.5)
 
   await redis.set('code_pool', pool)
