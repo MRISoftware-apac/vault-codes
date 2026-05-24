@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Loading your vault access...</title>
+  <style>
+    body { font-family: sans-serif; display: flex; align-items: center;
+           justify-content: center; height: 100vh; margin: 0;
+           background: #f9f9f9; }
+    .box { text-align: center; max-width: 400px; padding: 2rem; }
+    h1 { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
+    p { color: #666; font-size: 0.9rem; line-height: 1.6; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1 id="msg">Loading your vault access...</h1>
+  <p id="sub"></p>
+</div>
+<script>
+  async function init() {
+    try {
+      const res = await fetch('/api/get-code')
+      const data = await res.json()
+
+      if (data.error === 'outside_window') {
+        document.getElementById('msg').textContent = 'Come back during opening hours'
+        document.getElementById('sub').textContent =
+          'The vault is open between 8:00am and 1:30pm.'
+        return
+      }
+      if (data.error === 'no_codes_available') {
+        document.getElementById('msg').textContent = 'All codes have been claimed'
+        document.getElementById('sub').textContent =
+          'Stay tuned for the next release.'
+        return
+      }
+
+      const FORM_ID = '/Jyx6wHN2/'
+      window.location.href =
+        'https://form.typeform.com/to/' + FORM_ID + '?vault_code=' + data.code
+
+    } catch(e) {
+      document.getElementById('msg').textContent = 'Something went wrong'
+      document.getElementById('sub').textContent = 'Please try again shortly.'
+    }
+  }
+  init()
+</script>
+</body>
+</html>
