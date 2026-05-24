@@ -1,7 +1,7 @@
 import { kv } from '@vercel/kv';
 
-const OPEN_HOUR = 8;
-const CLOSE_HOUR = 13;
+const OPEN_HOUR = 0;
+const CLOSE_HOUR = 14:00;
 const CLOSE_MINUTES = 30;
 
 export default async function handler(req, res) {
